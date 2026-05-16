@@ -1,12 +1,16 @@
 
 import './App.css'
 import { useOrderBook } from './hooks/useOrderBook';
+import OrderBookTable from './components/OrderBookTable.tsx';
 function App() {
  const data = useOrderBook();
     console.log(data);
   return (
     <>
-     <h1 className='text-green-300'>This is it</h1>
+    <div className='px-4'>
+      <OrderBookTable />
+    </div>
+    
     </>
   )
 }
