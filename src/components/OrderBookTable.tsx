@@ -4,12 +4,17 @@ import {type ProcessedRow, type spreadMetrics } from "../types/orderBookTypes"
 function OrderBookTable() {
   const [bids,setBids]=useState<ProcessedRow[]>([])
   const [asks,setAsks]=useState<ProcessedRow[]>([])
+  const [bidDepth,setBidDepth]=useState<number|null>(null)
+  const [askDepth,setAskDepth]=useState<number|null>(null)
   const [midPrice,setMidPrice]=useState<number|null>(null)
   const [prevMid,setPrevMid]=useState<number|null>(null)
   const { rowData, spreadMetrics } = useOrderBook();
   useEffect(()=>{
     const bidRows = rowData.filter((item) => item.side === "bid");
     const askRows = rowData.filter((item) => item.side === "ask");
+    rowData.map((items)=>{
+      items.side == 'bid' ? setBidDepth(items.depth) : setAskDepth(items.depth)
+    })
     const mid=spreadMetrics?.midPrice
     setPrevMid(midPrice)  
     if (mid !== undefined) {
@@ -29,49 +34,33 @@ function OrderBookTable() {
       </div>
       <div className='flex items-center columns-3 gap-20 text-xs text-black/55'>
       <div>
-        {bids.map((items)=>{
-          return(
-            <p className="text-red-500">{(items.price).toFixed(2)}</p>
-          )
-        })}
+        {bids.map((items) => (
+  <div key={items.price} className="relative flex gap-12 text-xs">
+    <div 
+      className="absolute top-0 left-0 h-full bg-red-200 opacity-50"
+      style={{ width: `${items.depth}%` }}
+    />
+    <p className="text-red-500 w-24">{items.price.toFixed(2)}</p>
+    <p className="text-black/55 w-20">{items.size.toFixed(5)}</p>
+    <p className="text-black/55 w-20">{items.total.toFixed(4)}</p>
+  </div>
+))}
       </div>
-      <div>
-          {bids.map((items)=>{
-          return(
-            <p className="text-black-80">{(items.size).toFixed(5)}</p>
-          )
-        })}
-      </div>
-         <div >
-          {bids.map((items)=>{
-          return(
-            <p className="text-black-80">{(items.total).toFixed(4)}</p>
-          )
-        })}
-      </div> 
       </div>
       <p className={`py-4 ${(prevMid ?? 0) < (midPrice ?? 0) ? "text-green-500":"text-red-500"}`}>{midPrice?.toFixed(3)} <span className="text-xs text-black/35 px-4">${midPrice?.toFixed(2)}</span></p>
       <div className='flex items-center columns-3 gap-20 text-xs text-black/55'>
           <div>
-             {asks.map((items)=>{
-          return(
-            <p className="text-green-500">{(items.price).toFixed(2)}</p>
-          )
-        })}
-          </div>
-          <div>
-            {asks.map((items)=>{
-          return(
-            <p className="text-black-80">{(items.size).toFixed(5)}</p>
-          )
-        })}
-          </div>
-          <div>
-           {asks.map((items)=>{
-          return(
-            <p className="text-black-80">{(items.total).toFixed(4)}</p>
-          )
-          })} 
+         {asks.map((items) => (
+      <div key={items.price} className="relative flex gap-20 text-xs">
+    <div 
+      className="absolute top-0 left-0 h-full bg-green-200 opacity-50"
+      style={{ width: `${items.depth}%` }}
+    />
+           <p key={items.price} className="text-green-500">{(items.price).toFixed(2)}</p>
+           <p key={items.price} className="text-black-80">{(items.size).toFixed(5)}</p>
+          <p key={items.price} className="text-black-80">{(items.total).toFixed(4)}</p>
+  </div>
+))}
           </div>
        </div>
     </div>

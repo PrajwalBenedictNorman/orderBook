@@ -23,7 +23,7 @@ export function useOrderBook(){
 
     const bidRows: ProcessedRow[] =data?.bids.map(({price,size},index)=>{
         bidTotal+=size
-        depth = prevSnap.current?.bids[index].size==null ? 0 :((size)/bidTotalSize)*100
+        depth = prevSnap.current?.bids[index].size==null ? 0 :(bidTotal/bidTotalSize)*100
         let flash:"up" | "down" | "none"= prevSnap.current?.bids[index].size==null ? 'none' : prevSnap.current.bids[index].size < size ? "up" : "down" 
          return {
         price,
@@ -36,7 +36,7 @@ export function useOrderBook(){
     })?? []
     const askRows: ProcessedRow[] =data?.ask.map(({price,size},index)=>{
         askTotal+=size
-        depth = prevSnap.current?.ask[index].size==null ? 0 :(size/askTotalSize)*100
+        depth = prevSnap.current?.ask[index].size==null ? 0 :(askTotal/askTotalSize)*100
         let flash:"up" | "down" | "none"= prevSnap.current?.ask[index].size==null ? 'none' : prevSnap.current.ask[index].size < size ? "up" : "down" 
          return {
         price,
