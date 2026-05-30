@@ -4,7 +4,7 @@ import { useOrderBook } from './hooks/useOrderBook';
 import OrderBookTable from './components/OrderBookTable.tsx';
 import DeepCharts from './components/DepthChart.tsx';
 import SpreadMatrice from './components/SpreadMatrice.tsx';
-import Sparkline from './components/Sparkline.tsx';
+import Sparkline from './components/ imbalance.tsx';
 function App() {
  const data = useOrderBook();
     console.log(data);
